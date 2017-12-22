@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="com.example.aniket.bakingapp.view.RecipeDetailActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ingredients_title"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scrollIndicators="bottom|top"
+        android:scrollbarAlwaysDrawVerticalTrack="true">
+
+        <TextView
+            android:id="@+id/recipe_detail_text"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:textSize="16sp" />
+    </ScrollView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recipe_detail_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>
