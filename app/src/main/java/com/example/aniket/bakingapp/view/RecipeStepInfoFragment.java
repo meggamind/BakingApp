@@ -1,11 +1,11 @@
 package com.example.aniket.bakingapp.view;
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +20,7 @@ import com.example.aniket.bakingapp.R;
 import com.example.aniket.bakingapp.data.CakeConstants;
 import com.example.aniket.bakingapp.pojo.RecipeItem;
 import com.example.aniket.bakingapp.pojo.Step;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -54,6 +55,7 @@ public class RecipeStepInfoFragment extends Fragment {
     private SimpleExoPlayerView mSimpleExoPlayerView;
     private SimpleExoPlayer mSimpleExoPlayer;
     private RequestedStepClickListener mStepRequestedClickListener;
+    private Long mSavedPosition = C.TIME_UNSET;
 
     public RecipeStepInfoFragment() {
     }
@@ -81,11 +83,14 @@ public class RecipeStepInfoFragment extends Fragment {
             } else {
                 mSelectedIndex = getArguments().getInt(CakeConstants.SELECTED_INDEX);
                 mRecipeName = getArguments().getString(CakeConstants.SELECTED_STEP_RECIPE_TITLE);
+                mSavedPosition = getArguments().getLong(CakeConstants.SELECTED_POSITION, C.TIME_UNSET);
             }
         } else {
             mSteps = savedInstanceState.getParcelableArrayList(CakeConstants.SELECTED_STEPS);
             mSelectedIndex = savedInstanceState.getInt(CakeConstants.SELECTED_INDEX);
             mRecipeName = savedInstanceState.getString(CakeConstants.SELECTED_STEP_RECIPE_TITLE);
+            mSavedPosition = savedInstanceState.getLong(CakeConstants.SELECTED_POSITION, C.TIME_UNSET);
+            System.out.println("Aniket3, mSavedPosition: " + mSavedPosition);
         }
 
         View rootView = inflater.inflate(R.layout.recipe_selected_step_fragment, container, false);
@@ -192,6 +197,7 @@ public class RecipeStepInfoFragment extends Fragment {
                     new DefaultDataSourceFactory(getContext(), userAgent),
                     new DefaultExtractorsFactory(), null, null);
             mSimpleExoPlayer.prepare(mediaSource);
+            mSimpleExoPlayer.seekTo(mSavedPosition);
             mSimpleExoPlayer.setPlayWhenReady(true);
         }
     }
@@ -202,6 +208,7 @@ public class RecipeStepInfoFragment extends Fragment {
         currentState.putParcelableArrayList(CakeConstants.SELECTED_STEPS, mSteps);
         currentState.putInt(CakeConstants.SELECTED_INDEX, mSelectedIndex);
         currentState.putString(CakeConstants.SELECTED_STEP_RECIPE_TITLE, mRecipeName);
+        currentState.putLong(CakeConstants.SELECTED_POSITION, mSavedPosition);
     }
 
 
@@ -229,6 +236,17 @@ public class RecipeStepInfoFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("Aniket3, onResume");
+        String videoURL = mSteps.get(mSelectedIndex).getVideoURL();
+
+        if (!videoURL.isEmpty()) {
+            initializePlayer(Uri.parse(mSteps.get(mSelectedIndex).getVideoURL()));
+        }
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         if (mSimpleExoPlayer != null) {
@@ -241,9 +259,12 @@ public class RecipeStepInfoFragment extends Fragment {
     public void onPause() {
         super.onPause();
         if (mSimpleExoPlayer != null) {
+            mSavedPosition = mSimpleExoPlayer.getCurrentPosition();
             mSimpleExoPlayer.stop();
             mSimpleExoPlayer.release();
+            mSimpleExoPlayer = null;
         }
+
     }
 
 }

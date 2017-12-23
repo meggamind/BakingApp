@@ -11,6 +11,7 @@
         android:layout_margin="8dp"
         android:textAlignment="viewStart"
         android:textSize="12sp"
+        android:textColor="#FFFF"
         android:textStyle="bold" />
 
 </LinearLayout>

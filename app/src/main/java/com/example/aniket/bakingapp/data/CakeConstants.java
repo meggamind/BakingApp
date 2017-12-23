@@ -19,4 +19,5 @@ public class CakeConstants {
     public static final String SELECTED_STEPS = "selected_steps";
     public static final String SELECTED_STEP_RECIPE_TITLE = "selected_step_recipe_nma";
     public static final String SELECTED_INDEX = "selected_index";
+    public static final String SELECTED_POSITION = "selected_position";
 }
