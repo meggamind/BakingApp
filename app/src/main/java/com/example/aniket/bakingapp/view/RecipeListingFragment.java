@@ -15,6 +15,7 @@ import com.example.aniket.bakingapp.Network.IFetchedRecipe;
 import com.example.aniket.bakingapp.R;
 import com.example.aniket.bakingapp.adapter.RecipeAdapter;
 import com.example.aniket.bakingapp.data.CakeConstants;
+import com.example.aniket.bakingapp.idlingtestresource.IdlingTestResource;
 import com.example.aniket.bakingapp.pojo.RecipeItem;
 
 import java.util.ArrayList;
@@ -53,6 +54,12 @@ public class RecipeListingFragment extends Fragment {
         IFetchedRecipe fetchedRecipe = FetchRecipe.retriveData();
         final Call<ArrayList<RecipeItem>> recipe = fetchedRecipe.getRecipe();
 
+        final IdlingTestResource idlingResource = ((RecipeListingActivity)getActivity()).getIdlingResource();
+
+        if (idlingResource != null) {
+            idlingResource.setIdleState(false);
+        }
+
         recipe.enqueue(new Callback<ArrayList<RecipeItem>>() {
             @Override
             public void onResponse(Call<ArrayList<RecipeItem>> call, Response<ArrayList<RecipeItem>> response) {
@@ -62,6 +69,9 @@ public class RecipeListingFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(CakeConstants.FETCHED_RECIPES, recipes);
                 recipeAdapter.setRecipeData(recipes, getContext());
+                if (idlingResource != null) {
+                    idlingResource.setIdleState(true);
+                }
             }
 
             @Override

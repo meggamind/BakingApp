@@ -14,6 +14,7 @@ import com.example.aniket.bakingapp.adapter.RecipeDetailAdapter;
 import com.example.aniket.bakingapp.data.CakeConstants;
 import com.example.aniket.bakingapp.pojo.Ingredient;
 import com.example.aniket.bakingapp.pojo.RecipeItem;
+import com.example.aniket.bakingapp.widgets.UpdateBakingService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,7 @@ public class RecipeDetailInfoFragment extends Fragment {
         recyclerView.setAdapter(recipeDetailAdapter);
         recipeDetailAdapter.setRecipeStepData(recipes, getContext());
 
+        UpdateBakingService.startBakingService(getContext(), recipeIngredients);
 
         return rootView;
 

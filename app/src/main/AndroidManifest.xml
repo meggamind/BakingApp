@@ -22,6 +22,25 @@
             android:name=".view.RecipeDetailActivity"
             android:label="@string/title_activity_recipe_detail"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <service android:name=".widgets.UpdateBakingService" />
+
+        <service
+            android:name=".widgets.GridWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver
+            android:name=".widgets.RecipeWidgetProvider"
+            android:icon="@drawable/ic_art_track_black_36dp">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE2" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/baking_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
